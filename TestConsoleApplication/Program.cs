@@ -1,21 +1,48 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace TestConsoleApplication
 {
+    using Autofac;
+    using AutoMapper;
+    using System;
+    using System.Collections.Generic;
+
     class Program
     {
+        private static IContainer _container;
         static void Main(string[] args)
         {
-                        
+            containerInsctanceRegister();            
         }
 
-        public void DoSomeStaff()
+        static private void containerInsctanceRegister()
+        {
+            var builder = new ContainerBuilder();
+            var output = new Nothing("new name");
+            builder.RegisterInstance(output).As<INothing>();
+
+            _container = builder.Build();
+            _container.BeginLifetimeScope().Resolve<INothing>().Showname();
+        }
+
+        static private void containerLambdaRegister()
+        {
+            var builder = new ContainerBuilder();
+            builder.Register(c => new Nothing("new name")).As<INothing>();
+
+            _container = builder.Build();
+            _container.BeginLifetimeScope().Resolve<INothing>().Showname();
+        }
+
+        static private void containerTypeRegister()
+        {            
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterType<Wizard>().As<IWizard>();
+            _container = containerBuilder.Build();
+
+            _container.BeginLifetimeScope().Resolve<IWizard>().DoSomeWeirdStuff();
+        }
+
+        static private void DoSomeStaff()
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -45,6 +72,39 @@ namespace TestConsoleApplication
                 }
                 Console.WriteLine();
             }
+        }
+    }
+
+    public interface IWizard
+    {
+        void DoSomeWeirdStuff();
+    }
+
+    public class Wizard : IWizard
+    {
+        public void DoSomeWeirdStuff()
+        {
+            Console.WriteLine("That was weird!");
+        }
+    }
+
+    public interface INothing
+    {
+        void Showname();
+    }
+
+    public class Nothing : INothing
+    {
+        public Nothing(string name)
+        {
+            this._name = name;
+        }
+
+        private string _name = "default name";
+
+        public void Showname()
+        {
+            Console.WriteLine(_name);
         }
     }
 }
