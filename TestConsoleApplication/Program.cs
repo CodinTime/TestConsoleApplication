@@ -12,6 +12,11 @@ namespace TestConsoleApplication
     {
         static void Main(string[] args)
         {
+                        
+        }
+
+        public void DoSomeStaff()
+        {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new AutomapperProfile());
@@ -24,10 +29,11 @@ namespace TestConsoleApplication
             personDtoList.Add(new PersonDto { Id = 4, FirstName = "John", LastName = null, Age = 14 });
             personDtoList.Add(new PersonDto { Id = 5, FirstName = "Jane", LastName = "Ribbon", Age = 16 });
             personDtoList.Add(new PersonDto { Id = 6, FirstName = "Jack", LastName = "Jefferson", Age = 18 });
-            
+
 
             Type type = typeof(PersonViewModel);
             var properties = type.GetProperties();
+            var fields = type.GetFields();
             foreach (var personDto in personDtoList)
             {
                 PersonViewModel person = mapper.Map<PersonViewModel>(personDto);
@@ -39,7 +45,6 @@ namespace TestConsoleApplication
                 }
                 Console.WriteLine();
             }
-            
         }
     }
 }
