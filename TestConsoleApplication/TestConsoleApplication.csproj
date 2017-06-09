@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutomapperProfile.cs" />
     <Compile Include="PersonDto.cs" />
     <Compile Include="PersonViewModel.cs" />
     <Compile Include="Program.cs" />
